@@ -32,6 +32,12 @@ Route::middleware('auth')->group(function () {
         ]);
     })->name('tasks.index');
 
+    Route::get('/tasks/trash', function () {
+        return view('trash', [
+            'tasks' => Task::onlyTrashed()->paginate(10),
+        ]);
+    })->name('tasks.trash');
+
     Route::view('/tasks/create', 'create')->name('tasks.create');
 
     Route::get('/tasks/{task}/edit', function (Task $task) {
@@ -53,6 +59,20 @@ Route::middleware('auth')->group(function () {
         return redirect()->route('tasks.show', ['task' => $task])
             ->with('success', 'Task updated successfully!');
     })->name('tasks.update');
+
+    Route::get('/tasks/{id}/restore', function ($id) {
+        $task = Task::onlyTrashed()->findOrFail($id);
+        $task->restore();
+        return redirect()->route('tasks.show', ['task' => $task])
+            ->with('success', 'Task restored successfully!');
+    })->name('tasks.restore');
+    
+    Route::get('/tasks/{id}/dispose', function ($id) {
+        $task = Task::onlyTrashed()->findOrFail($id);
+        $task->forceDelete();
+        return redirect()->route('tasks.trash')
+            ->with('success', 'Task disposed successfully!');
+    })->name('tasks.dispose');
 
     Route::delete('/tasks/{task}', function (Task $task) {
         $task->delete();

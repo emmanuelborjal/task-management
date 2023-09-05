@@ -18,6 +18,7 @@ return new class extends Migration
             $table->text('long_description')->nullable();
             $table->enum('status', ['todo', 'in_progress', 'completed'])->default('todo');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

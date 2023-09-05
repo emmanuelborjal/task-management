@@ -34,6 +34,10 @@
             @apply text-red-500 text-sm
         }
 
+        .task-item {
+            @apply mb-2 rounded border border-slate-300 pl-2 pb-2
+        }
+
         label {
             @apply block uppercase text-slate-700 mb-2
         }
