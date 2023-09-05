@@ -3,34 +3,41 @@
 @section('title', $task->title)
 
 @section('content')
-<p>{{ $task->description }}</p>
+<div class="mb-4">
+    <a href="{{ route('tasks.index') }}" class="link">← Go back to the task list!</a>
+</div>
+
+<p class="mb-4 text-slate-700">{{ $task->description }}</p>
 
 @if($task->long_description)
-    <p>{{ $task->long_description }}</p>
+    <p class="mb-4 text-slate-700">{{ $task->long_description }}</p>
 @endif
 
-<p>{{ $task->created_at }}</p>
-<p>{{ $task->updated_at }}</p>
+<p class="mb-4 text-sm text-slate-500">Created {{ $task->created_at->diffForHumans() }} • Updated
+    {{ $task->updated_at->diffForHumans() }}</p>
 
-<p>
-    @if ($task->status == 'todo')
-        Todo
-    @elseif ($task->status == 'in_progress')
-        In Progress
+<p class="mb-4">
+    @if($task->status == 'todo')
+        <span class="font-medium text-red-500">Todo</span>
+    @elseif($task->status == 'in_progress')
+        <span class="font-medium text-blue-500">In Progress</span>
     @else
-        Completed
+        <span class="font-medium text-green-500">Completed</span>
     @endif
 </p>
 
-<div><a href="{{ route('tasks.edit', ['task' => $task]) }}">Edit</a></div>
+<div class="flex gap-2">
+    <a href="{{ route('tasks.edit', ['task' => $task]) }}"
+        class="btn-edit">
+        Edit
+    </a>
 
-<div>
     <form
         action="{{ route('tasks.destroy', ['task' => $task]) }}"
         method="post">
         @csrf
         @method('delete')
-        <button type="submit">Delete</button>
+        <button type="submit" class="btn-delete">Delete</button>
     </form>
 </div>
 @endsection
