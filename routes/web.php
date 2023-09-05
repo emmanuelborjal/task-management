@@ -25,7 +25,7 @@ Route::get('/tasks', function () {
     ]);
 })->name('tasks.index');
 
-Route::view('/tasks/create', 'create')->name('tasks', 'create');
+Route::view('/tasks/create', 'create')->name('tasks.create');
 
 Route::get('/tasks/{task}/edit', function (Task $task) {
     return view('edit', ['task' => $task]);

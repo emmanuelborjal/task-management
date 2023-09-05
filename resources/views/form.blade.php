@@ -39,6 +39,20 @@
             <p class="error-message">{{ $message }}</p>
         @enderror
     </div>
+
+    <div>
+        <label for="status">Status:</label>
+        <select name="status" id="status">
+        @isset($task)
+            <option @selected($task->status == 'todo') value="todo">Todo</option>
+            <option @selected($task->status == 'in_progress') value="in_progress">In Progress</option>
+            <option @selected($task->status == 'completed') value="completed">Completed</option>
+        @else
+            <option value="todo">Todo</option>
+        @endisset
+        </select>
+    </div>
+
     <div><button type="submit">
         @isset($task)
             Update Task

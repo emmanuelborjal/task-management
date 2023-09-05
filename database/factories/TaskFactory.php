@@ -20,7 +20,7 @@ class TaskFactory extends Factory
             'title' => fake()->sentence,
             'description' => fake()->paragraph,
             'long_description' => fake()->paragraph(7),
-            'completed' => fake()->boolean,
+            'status' => 'todo',
         ];
     }
 }
