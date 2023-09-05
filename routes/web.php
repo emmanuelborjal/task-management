@@ -13,6 +13,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', function () use ($tasks) {
+    return view('index', [
+        'tasks' => $tasks,
+    ]);
+})->name('tasks.index');
+
+Route::get('/{id}', function ($id) {
+    return 'Return one single task';
+})->name('tasks.show');
