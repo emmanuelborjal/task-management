@@ -5,6 +5,7 @@
 @section('content')
 <nav class="mb-4">
     <a href="{{ route('tasks.create') }}" class="link">Add Task</a>
+    <a href="{{ route('profile.logout') }}" class="link ml-2">Logout</a>
 </nav>
 
 @forelse($tasks as $task)
