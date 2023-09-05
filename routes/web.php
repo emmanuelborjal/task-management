@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Requests\TaskRequest;
 use App\Models\Task;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -26,11 +27,29 @@ Route::middleware('auth')->group(function () {
         return redirect()->route('tasks.index');
     });
 
-    Route::get('/tasks', function () {
+    Route::get('/tasks', function (Request $request) {
+        $search = $request->input('search');
+        $tasks = Task::when($search, function ($query) use ($search) {
+            $query->where('title', 'like', '%' . $search . '%')
+                ->orWhere('description', 'like', '%' . $search . '%')
+                ->orWhere('long_description', 'like', '%' . $search . '%');
+        })->paginate(10);
+        return view('index', [
+            'tasks' => $tasks,
+        ]);
+    })->name('tasks.index');
+
+    Route::get('/tasks/latest', function () {
         return view('index', [
             'tasks' => Task::latest()->paginate(10),
         ]);
-    })->name('tasks.index');
+    })->name('tasks.latest');
+
+    Route::get('/tasks/oldest', function () {
+        return view('index', [
+            'tasks' => Task::oldest()->paginate(10),
+        ]);
+    })->name('tasks.oldest');
 
     Route::get('/tasks/trash', function () {
         return view('trash', [
@@ -66,7 +85,7 @@ Route::middleware('auth')->group(function () {
         return redirect()->route('tasks.show', ['task' => $task])
             ->with('success', 'Task restored successfully!');
     })->name('tasks.restore');
-    
+
     Route::get('/tasks/{id}/dispose', function ($id) {
         $task = Task::onlyTrashed()->findOrFail($id);
         $task->forceDelete();
