@@ -33,7 +33,7 @@ Route::middleware('auth')->group(function () {
             $query->where('title', 'like', '%' . $search . '%')
                 ->orWhere('description', 'like', '%' . $search . '%')
                 ->orWhere('long_description', 'like', '%' . $search . '%');
-        })->paginate(10);
+        })->latest()->paginate(10);
         return view('index', [
             'tasks' => $tasks,
         ]);
